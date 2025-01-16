@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo & Memo App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            background-image: url('https://images.unsplash.com/photo-1536152470836-b943b246224c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .calendar {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+        .task-list, .memo {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .task-checkbox {
+            margin-right: 10px;
+        }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Todo & Memo App</h1>
+        
+        <div class="calendar">
+            <h2>Calendar</h2>
+            <table id="calendar">
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="task-list">
+            <h2>Tasks</h2>
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <button onclick="addTask()">Add Task</button>
+            <ul id="tasks"></ul>
+        </div>
+        
+        <div class="memo">
+            <h2>Memo</h2>
+            <textarea id="memoText" rows="5" placeholder="Write your memo here"></textarea>
+            <button onclick="saveMemo()">Save Memo</button>
+        </div>
+    </div>
+
+    <script>
+        // Calendar
+        function generateCalendar() {
+            const today = new Date();
+            const month = today.getMonth();
+            const year = today.getFullYear();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay();
+
+            let date = 1;
+            const calendar = document.getElementById("calendar");
+
+            for (let i = 0; i < 6; i++) {
+                const row = calendar.insertRow();
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        row.insertCell();
+                    } else if (date > daysInMonth) {
+                        break;
+                    } else {
+                        const cell = row.insertCell();
+                        cell.textContent = date;
+                        if (date === today.getDate()) {
+                            cell.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+                        }
+                        date++;
+                    }
+                }
+            }
+        }
+
+        // Tasks
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+            if (taskText !== "") {
+                const tasks = document.getElementById("tasks");
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" onchange="toggleTask(this)">
+                    <span>${taskText}</span>
+                `;
+                tasks.appendChild(li);
+                taskInput.value = "";
+            }
+        }
+
+        function toggleTask(checkbox) {
+            const taskText = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                taskText.classList.add("completed");
+            } else {
+                taskText.classList.remove("completed");
+            }
+        }
+
+        // Memo
+        function saveMemo() {
+            alert("Memo saved!");
+        }
+
+        // Initialize
+        generateCalendar();
+    </script>
+</body>
+</html>
+
